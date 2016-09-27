@@ -544,62 +544,20 @@ public class CommandLine {
   /* printUsage() is generic for OutputStreamType because the Swift compiler crashes
    * on inout protocol function parameters in Xcode 7 beta 1 (rdar://21372694).
    */
-    
-    /**
-     *  If set, will print the stirng out right after the usage message on the same line, ie: `Usage: name [options]`.
-     *  Useful to inform user of any command(s) you might support after the options.
-     *
-     *  Formatted with via OutputType.About.
-     *
-     *  Example: "command" would print out:
-     *      Usage: name [options] command
-     */
-    public var supplementalUsage: String?
-    
-    /**
-     *  If set, will print the string out on the next line after the usage line, ie: `Usage: name [options]`.
-     *  Useful to inform user of any command(s) you might support after the options, etc.
-     *  Use new line characters if you want to provide some more help text on the lines
-     *  right after `Usage: name [options]`.
-     *
-     *  Formatted with via OutputType.About.
-     *
-     *  Example:
-     *     supplmentalUsage = "command"
-     *     supplementalHelp = "Commands include: new, edit, delete"
-     *
-     *     Setting both properties to thoes values would produce this output for help:
-     *
-     *     Usage: name [options] command
-     *          Commands include: new, edit, delete
-     */
-    public var supplementalHelp: String?
-    
-    
-    /**
-     * Prints a usage message.
-     *
-     * - parameter to: An OutputStreamType to write the error message to.
-     */
-    
-    
+
+  /**
+   * Prints a usage message.
+   * 
+   * - parameter to: An OutputStreamType to write the error message to.
+   */
   #if swift(>=3.0)
     public func printUsage<TargetStream: OutputStream>(_ to: inout TargetStream) {
       /* Nil coalescing operator (??) doesn't work on closures :( */
       let format = formatOutput != nil ? formatOutput! : defaultFormat
 
       let name = _arguments[0]
-      var suppUsage = self.supplementalUsage ?? ""
-      if (suppUsage.characters.count > 0) {
-        suppUsage = " " + suppUsage
-      }
-    
-      print(format("Usage: \(name) [options]" + (suppUsage), .About), terminator: "", toStream: &to)
-    
-      if let suppHelp = self.supplementalHelp {
-        print(format(suppHelp, .About), terminator: "", toStream: &to)
-      }
-    
+      print(format("Usage: \(name) [options]", .About), terminator: "", to: &to)
+
       for opt in _options {
         print(format(opt.flagDescription, .OptionFlag), terminator: "", to: &to)
         print(format(opt.helpMessage, .OptionHelp), terminator: "", to: &to)
@@ -611,17 +569,8 @@ public class CommandLine {
       let format = formatOutput != nil ? formatOutput! : defaultFormat
 
       let name = _arguments[0]
-      var suppUsage = self.supplementalUsage ?? ""
-      if (suppUsage.characters.count > 0) {
-          suppUsage = " " + suppUsage
-      }
-      
-      print(format("Usage: \(name) [options]" + (suppUsage), .About), terminator: "", toStream: &to)
-        
-      if let suppHelp = self.supplementalHelp {
-        print(format(suppHelp, .About), terminator: "", toStream: &to)
-      }
-      
+      print(format("Usage: \(name) [options]", .About), terminator: "", toStream: &to)
+
       for opt in _options {
         print(format(opt.flagDescription, .OptionFlag), terminator: "", toStream: &to)
         print(format(opt.helpMessage, .OptionHelp), terminator: "", toStream: &to)
