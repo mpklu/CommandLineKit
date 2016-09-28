@@ -79,7 +79,16 @@ public class CommandLine {
 
     return usedFlags
   }
-
+    
+  /**
+   * If true, when the stopper is encountered '--', we not only stop parsing options in general
+   * we also stop parsing multi-value options. This allows a user to indicate to an unbounded option
+   * to stop if it happens to be the last option in the option list, just before the non-option
+   * unparsed arguments.
+   *
+   */
+  public var stopperStopsMultiValueOptionParsing = false
+    
   /**
    * After calling `parse()`, this property will contain any values that weren't captured
    * by an Option. For example:
@@ -245,7 +254,11 @@ public class CommandLine {
 
     for i in flagIndex + 1 ..< _arguments.count {
       if !skipFlagChecks {
-        if _arguments[i] == ArgumentStopper {
+        if self._arguments[i] == ArgumentStopper {
+          if self.stopperStopsMultiValueOptionParsing == true {
+            break;
+          }
+    
           skipFlagChecks = true
           continue
         }
@@ -333,6 +346,10 @@ public class CommandLine {
     for i in flagIndex + 1 ..< _arguments.count {
       if !skipFlagChecks {
         if _arguments[i] == ArgumentStopper {
+          if self.stopperStopsMultiValueOptionParsing == true {
+            break;
+          }
+          
           skipFlagChecks = true
           continue
         }
