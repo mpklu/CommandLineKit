@@ -62,12 +62,12 @@ public class Option {
   
   /** Initializes a new Option that has only a short flag. */
   public convenience init(shortFlag: String, required: Bool = false, helpMessage: String) {
-    self.init(shortFlag: shortFlag as String?, longFlag: nil, required: required, helpMessage: helpMessage)
+    self.init(shortFlag: shortFlag, longFlag: nil, required: required, helpMessage: helpMessage)
   }
   
   /** Initializes a new Option that has only a long flag. */
   public convenience init(longFlag: String, required: Bool = false, helpMessage: String) {
-    self.init(shortFlag: nil, longFlag: longFlag as String?, required: required, helpMessage: helpMessage)
+    self.init(shortFlag: nil, longFlag: longFlag, required: required, helpMessage: helpMessage)
   }
 
   #if swift(>=3.0)
@@ -343,12 +343,7 @@ public class EnumOption<T:RawRepresentable where T.RawValue == String>: Option {
   override public var claimedValues: Int {
     return _value != nil ? 1 : 0
   }
-
-  /* Re-defining the intializers is necessary to make the Swift 2 compiler happy, as
-   * of Xcode 7 beta 2.
-   */
   
-
   #if swift(>=3.0)
 
   override func setValue(_ values: [String]) -> Bool {
