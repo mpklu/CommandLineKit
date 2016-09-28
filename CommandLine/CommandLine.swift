@@ -79,7 +79,7 @@ public class CommandLine {
 
     return usedFlags
   }
-
+    
   /**
    * After calling `parse()`, this property will contain any values that weren't captured
    * by an Option. For example:
@@ -237,23 +237,19 @@ public class CommandLine {
   /* Returns all argument values from flagIndex to the next flag or the end of the argument array. */
   private func _getFlagValues(_ flagIndex: Int, _ attachedArg: String? = nil) -> [String] {
     var args: [String] = [String]()
-    var skipFlagChecks = false
-
+    
     if let a = attachedArg {
       args.append(a)
     }
 
     for i in flagIndex + 1 ..< _arguments.count {
-      if !skipFlagChecks {
-        if _arguments[i] == ArgumentStopper {
-          skipFlagChecks = true
-          continue
-        }
+      if self._arguments[i] == ArgumentStopper {
+        break
+      }
 
-        if _arguments[i].hasPrefix(ShortOptionPrefix) && Int(_arguments[i]) == nil &&
-          _arguments[i].toDouble() == nil {
-          break
-        }
+      if _arguments[i].hasPrefix(ShortOptionPrefix) && Int(_arguments[i]) == nil &&
+        _arguments[i].toDouble() == nil {
+        break
       }
 
       args.append(_arguments[i])
@@ -324,23 +320,19 @@ public class CommandLine {
   /* Returns all argument values from flagIndex to the next flag or the end of the argument array. */
   private func _getFlagValues(flagIndex: Int, _ attachedArg: String? = nil) -> [String] {
     var args: [String] = [String]()
-    var skipFlagChecks = false
 
     if let a = attachedArg {
       args.append(a)
     }
 
     for i in flagIndex + 1 ..< _arguments.count {
-      if !skipFlagChecks {
-        if _arguments[i] == ArgumentStopper {
-          skipFlagChecks = true
-          continue
-        }
+      if _arguments[i] == ArgumentStopper {
+        break
+      }
         
-        if _arguments[i].hasPrefix(ShortOptionPrefix) && Int(_arguments[i]) == nil &&
-          _arguments[i].toDouble() == nil {
-          break
-        }
+      if _arguments[i].hasPrefix(ShortOptionPrefix) && Int(_arguments[i]) == nil &&
+        _arguments[i].toDouble() == nil {
+        break
       }
     
       args.append(_arguments[i])

@@ -44,7 +44,7 @@ public class Option {
     }
   }
 
-  private init(_ shortFlag: String?, _ longFlag: String?, _ required: Bool, _ helpMessage: String) {
+  public init(shortFlag: String?, longFlag: String?, required: Bool = false, helpMessage: String) {
     if let sf = shortFlag {
       assert(sf.characters.count == 1, "Short flag must be a single character")
       assert(Int(sf) == nil && sf.toDouble() == nil, "Short flag cannot be a numeric value")
@@ -60,23 +60,14 @@ public class Option {
     self.required = required
   }
   
-  /* The optional casts in these initalizers force them to call the private initializer. Without
-   * the casts, they recursively call themselves.
-   */
-  
-  /** Initializes a new Option that has both long and short flags. */
-  public convenience init(shortFlag: String, longFlag: String, required: Bool = false, helpMessage: String) {
-    self.init(shortFlag as String?, longFlag, required, helpMessage)
-  }
-  
   /** Initializes a new Option that has only a short flag. */
   public convenience init(shortFlag: String, required: Bool = false, helpMessage: String) {
-    self.init(shortFlag as String?, nil, required, helpMessage)
+    self.init(shortFlag: shortFlag, longFlag: nil, required: required, helpMessage: helpMessage)
   }
   
   /** Initializes a new Option that has only a long flag. */
   public convenience init(longFlag: String, required: Bool = false, helpMessage: String) {
-    self.init(nil, longFlag as String?, required, helpMessage)
+    self.init(shortFlag: nil, longFlag: longFlag, required: required, helpMessage: helpMessage)
   }
 
   #if swift(>=3.0)
@@ -351,29 +342,6 @@ public class EnumOption<T:RawRepresentable where T.RawValue == String>: Option {
 
   override public var claimedValues: Int {
     return _value != nil ? 1 : 0
-  }
-
-  /* Re-defining the intializers is necessary to make the Swift 2 compiler happy, as
-   * of Xcode 7 beta 2.
-   */
-  
-  private override init(_ shortFlag: String?, _ longFlag: String?, _ required: Bool, _ helpMessage: String) {
-    super.init(shortFlag, longFlag, required, helpMessage)
-  }
-  
-  /** Initializes a new Option that has both long and short flags. */
-  public convenience init(shortFlag: String, longFlag: String, required: Bool = false, helpMessage: String) {
-    self.init(shortFlag as String?, longFlag, required, helpMessage)
-  }
-  
-  /** Initializes a new Option that has only a short flag. */
-  public convenience init(shortFlag: String, required: Bool = false, helpMessage: String) {
-    self.init(shortFlag as String?, nil, required, helpMessage)
-  }
-  
-  /** Initializes a new Option that has only a long flag. */
-  public convenience init(longFlag: String, required: Bool = false, helpMessage: String) {
-    self.init(nil, longFlag as String?, required, helpMessage)
   }
   
   #if swift(>=3.0)
