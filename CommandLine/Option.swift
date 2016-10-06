@@ -330,7 +330,7 @@ public class MultiStringOption: Option {
 }
 
 /** An option that represents an enum value. */
-public class EnumOption<T:RawRepresentable where T.RawValue == String>: Option {
+public class EnumOption<T:RawRepresentable>: Option where T.RawValue == String {
   private var _value: T?
   public var value: T? {
     return _value
