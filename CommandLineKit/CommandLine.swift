@@ -36,7 +36,7 @@ let ArgumentStopper = "--"
  */
 let ArgumentAttacher: Character = "="
 
-/* An output stream to stderr; used by CommandLine.printUsage(). */
+/* An output stream to stderr; used by CommandLineKit.printUsage(). */
 #if swift(>=3.0)
   private struct StderrOutputStream: TextOutputStream {
     static let stream = StderrOutputStream()
@@ -54,17 +54,17 @@ let ArgumentAttacher: Character = "="
 #endif
 
 /**
- * The CommandLine class implements a command-line interface for your app.
+ * The CommandLineKit class implements a command-line interface for your app.
  * 
  * To use it, define one or more Options (see Option.swift) and add them to your
- * CommandLine object, then invoke `parse()`. Each Option object will be populated with
+ * CommandLineKit object, then invoke `parse()`. Each Option object will be populated with
  * the value given by the user.
  *
  * If any required options are missing or if an invalid value is found, `parse()` will throw
  * a `ParseError`. You can then call `printUsage()` to output an automatically-generated usage
  * message.
  */
-public class CommandLine {
+public class CommandLineKit {
   private var _arguments: [String]
   private var _options: [Option] = [Option]()
   private var _maxFlagDescriptionWidth: Int = 0
@@ -85,7 +85,7 @@ public class CommandLine {
    * by an Option. For example:
    *
    * ```
-   * let cli = CommandLine()
+   * let cli = CommandLineKit()
    * let fileType = StringOption(shortFlag: "t", longFlag: "type", required: true, helpMessage: "Type of file")
    *
    * do {
@@ -111,7 +111,7 @@ public class CommandLine {
    * output, either before or after modifying the provided string. For example:
    *
    * ```
-   * let cli = CommandLine()
+   * let cli = CommandLineKit()
    * cli.formatOutput = { str, type in
    *   switch(type) {
    *   case .Error:

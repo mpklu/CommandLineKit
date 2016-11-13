@@ -16,7 +16,7 @@
  */
 
 import XCTest
-@testable import CommandLine
+@testable import CommandLineKit
 #if os(OSX)
   import Darwin
 #elseif os(Linux)
