@@ -14,7 +14,9 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-
+/*
+* Updated to swift 5.0 by Kun Lu 05/2019
+*/
 /**
  * The base class for a command-line option.
  */
@@ -46,7 +48,7 @@ public class Option {
 
   public init(shortFlag: String?, longFlag: String?, required: Bool = false, helpMessage: String) {
     if let sf = shortFlag {
-      assert(sf.characters.count == 1, "Short flag must be a single character")
+      assert(sf.count == 1, "Short flag must be a single character")
       assert(Int(sf) == nil && sf.toDouble() == nil, "Short flag cannot be a numeric value")
     }
     

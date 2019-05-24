@@ -14,7 +14,9 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-
+/*
+* Updated to swift 5.0 by Kun Lu 05/2019
+*/
 /* Required for localeconv(3) */
 #if os(OSX)
   import Darwin
@@ -57,7 +59,7 @@ internal extension String {
     let decimalPoint = self._localDecimalPoint()
 
     #if swift(>=3.0)
-      let charactersEnumerator = self.characters.enumerated()
+      let charactersEnumerator = self.enumerated()
     #else
       let charactersEnumerator = self.characters.enumerate()
     #endif
@@ -85,7 +87,7 @@ internal extension String {
     }
 
     return (Double(Int(characteristic)!) +
-      Double(Int(mantissa)!) / pow(Double(10), Double(mantissa.characters.count - 1))) *
+      Double(Int(mantissa)!) / pow(Double(10), Double(mantissa.count - 1))) *
       (isNegative ? -1 : 1)
   }
 
@@ -98,25 +100,31 @@ internal extension String {
    *
    * - returns: An array of string components.
    */
-  func split(by: Character, maxSplits: Int = 0) -> [String] {
-    var s = [String]()
-    var numSplits = 0
+  func mySplit(by: Character, maxSplits: Int = 0) -> [String] {
+	return self
+		.split(separator: by,
+			   maxSplits: maxSplits == 0 ? Int.max : maxSplits,
+			   omittingEmptySubsequences: true)
+		.map{String($0)}
 
-    var curIdx = self.startIndex
-    for i in self.characters.indices {
-      let c = self[i]
-      if c == by && (maxSplits == 0 || numSplits < maxSplits) {
-        s.append(self[curIdx..<i])
-        curIdx = self.index(after: i)
-        numSplits += 1
-      }
-    }
-
-    if curIdx != self.endIndex {
-      s.append(self[curIdx..<self.endIndex])
-    }
-
-    return s
+//    var s = [String]()
+//    var numSplits = 0
+//
+//    var curIdx = self.startIndex
+//    for i in self.indices {
+//      let c = self[i]
+//      if c == by && (maxSplits == 0 || numSplits < maxSplits) {
+//        s.append(self[curIdx..<i])
+//        curIdx = self.index(after: i)
+//        numSplits += 1
+//      }
+//    }
+//
+//    if curIdx != self.endIndex {
+//      s.append(self[curIdx..<self.endIndex])
+//    }
+//
+//    return self.split(by: by, maxSplits: <#T##Int#>)
   }
 
   #else
@@ -162,7 +170,7 @@ internal extension String {
    */
   func padded(toWidth width: Int, with padChar: Character = " ") -> String {
     var s = self
-    var currentLength = self.characters.count
+    var currentLength = self.count
 
     while currentLength < width {
       s.append(padChar)
@@ -189,8 +197,8 @@ internal extension String {
     var s = ""
     var currentLineWidth = 0
 
-    for word in self.split(by: splitBy) {
-      let wordLength = word.characters.count
+    for word in self.mySplit(by: splitBy) {
+      let wordLength = word.count
 
       if currentLineWidth + wordLength + 1 > width {
         /* Word length is greater than line length, can't wrap */

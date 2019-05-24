@@ -1,3 +1,6 @@
+### This is a fork of [CommandLineKit](https://github.com/mpklu/CommandLineKit). Works for swift 5.0
+
+
 # CommandLineKit [![Build Status](https://travis-ci.org/jatoben/CommandLineKit.svg?branch=master)](https://travis-ci.org/jatoben/CommandLineKit)
 
 A pure Swift library for creating command-line interfaces.
